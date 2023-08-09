@@ -153,8 +153,9 @@ def depthFirstSearch(problem):
                 break
 
     print(f"Action sequence: {actions}")
-    
-    util.raiseNotDefined()
+    return actions
+
+    #util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
