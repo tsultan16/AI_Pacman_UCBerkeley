@@ -87,6 +87,73 @@ def depthFirstSearch(problem):
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
     "*** YOUR CODE HERE ***"
+
+    s0 = problem.getStartState()
+    successors = problem.getSuccessors(s0)
+    print("Initial state:", s0)
+    print("Is the start a goal?", problem.isGoalState(s0))
+    
+    open_list = util.Stack()
+    expanded_nodes = []
+    explored_states = []
+    
+    # create source node and insert into stack
+    # node = (state, accumulated_cost, action, node_id, parent_id)
+    id = 0
+    src_node = (s0, 0, None, id, None)
+    open_list.push(src_node)
+
+    # DFS search
+    niter = 0
+    while not open_list.isEmpty():
+        
+        print(f"open list: {open_list.list}")
+        # select deepest node from the stack
+        node = open_list.pop()   
+        s = node[0]
+        prev_cost = node[1]
+        parent_id = node[3] 
+        print(f"Expanding node: {node}")
+        expanded_nodes.append(node)
+        explored_states.append(s)
+        # check if this node is a goal state
+        if problem.isGoalState(s):
+            print("Goal state found!")
+            break
+
+        # get successors/children
+        successors = problem.getSuccessors(s)
+        # create child nodes and insert them into stack
+        for successor in successors:
+            state = successor[0]
+            # only insert if this node has not been explored before
+            if state not in explored_states:
+                id += 1
+                action = successor[1]
+                accumulated_cost = prev_cost + successor[2]
+                child_node = (state, accumulated_cost, action, id, parent_id)
+                open_list.push(child_node)
+                print(f"Generated child node: {child_node}")
+
+        niter += 1
+
+    print(f"Expanded nodes: {expanded_nodes}")
+    # get the action sequence 
+    goal_node = expanded_nodes[-1]
+    parent_id = goal_node[-1]
+    actions = [goal_node[2]]
+    ix = len(expanded_nodes)-1
+    while ix > 0:
+        ix -= 1
+        node = expanded_nodes[ix]
+        if (node[3] == parent_id):
+            actions.insert(0,node[2])
+            parent_id = node[-1]
+            if(parent_id == 0):
+                break
+
+    print(f"Action sequence: {actions}")
+    
     util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
